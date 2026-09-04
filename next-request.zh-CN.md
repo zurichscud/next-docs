@@ -92,10 +92,3 @@ request.nextUrl.searchParams
 | `pathname`     | `string`                    | URL 的路径名（pathname）。                                                                 |
 | `searchParams` | `Object`                    | URL 的查询参数（search parameters）。                                                       |
 
-> **注意：** Pages Router 中的国际化（internationalization）属性无法在 App Router 中使用。了解更多关于 [App Router 的国际化](https://nextjs.org/docs/app/guides/internationalization)。
-
-## 版本历史
-
-| 版本       | 变更                                  |
-| ---------- | ------------------------------------- |
-| `v15.0.0`  | 移除了 `ip` 和 `geo`。                |
