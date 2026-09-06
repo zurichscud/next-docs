@@ -1,5 +1,4 @@
-import { notFound } from "next/navigation";
-import { locales, getDictionary } from "@/locale";
+import { getDictionary } from "@/locale";
 
 export default async function DocsPage({
   params,

@@ -18,6 +18,7 @@ export default function LangSwitcher() {
 
   return (
     <nav className="flex gap-2 text-sm">
+      {/* 需要实现高亮当前语言 */}
       {locales.map((locale) => (
         <Link
           key={locale}
