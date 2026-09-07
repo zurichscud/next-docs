@@ -82,16 +82,28 @@ export default function ChatWithFiles() {
 
   const handleSubmitWithFiles = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const encodedFiles = await Promise.all(
-      files.map(async (file) => ({
-        name: file.name,
-        type: file.type,
-        data: await encodeFileAsBase64(file),
-      })),
-    );
-    submit({ files: encodedFiles });
-    const generatedTitle = await generateQuizTitle(encodedFiles[0].name);
-    setTitle(generatedTitle);
+    try {
+      const uploadedFiles = await Promise.all(
+        files.map(async (file) => {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: file.name,
+              data: await encodeFileAsBase64(file),
+            }),
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error ?? "Upload failed");
+          return { name: file.name, type: file.type, url: result.url };
+        }),
+      );
+      submit({ files: uploadedFiles });
+      const generatedTitle = await generateQuizTitle(uploadedFiles[0].name);
+      setTitle(generatedTitle);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Upload failed");
+    }
   };
 
   const clearPDF = () => {
@@ -158,11 +170,7 @@ export default function ChatWithFiles() {
             </CardTitle>
             <CardDescription className="text-base">
               Upload a PDF to generate an interactive quiz based on its content
-              using the <Link href="https://sdk.vercel.ai">AI SDK</Link> and{" "}
-              <Link href="https://sdk.vercel.ai/providers/ai-sdk-providers/google-generative-ai">
-                Google&apos;s Gemini Pro
-              </Link>
-              .
+              using the <Link href="https://sdk.vercel.ai">AI SDK</Link> and DeepSeek.
             </CardDescription>
           </div>
         </CardHeader>

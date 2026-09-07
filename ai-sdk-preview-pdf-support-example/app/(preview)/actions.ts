@@ -1,6 +1,6 @@
 "use server";
 
-import { google } from "@ai-sdk/google";
+import { deepseek } from "@/lib/deepseek";
 import { generateObject } from "ai";
 import { z } from "zod";
 /**
@@ -10,7 +10,8 @@ import { z } from "zod";
  */
 export const generateQuizTitle = async (file: string) => {
   const result = await generateObject({
-    model: google("gemini-1.5-flash-latest"),
+    model: deepseek("deepseek-v4-flash"),
+    mode: "json",
     schema: z.object({
       title: z
         .string()
